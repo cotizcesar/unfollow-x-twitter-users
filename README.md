@@ -43,9 +43,11 @@ If you want to change the settings, you can edit the `CONFIG` object at the top 
 
 ```javascript
 const CONFIG = {
-    MAX_UNFOLLOWS: 50,      // Number of people to unfollow before stopping
-    SCROLL_DELAY: 2000,     // Wait time after scrolling (milliseconds)
-    ACTION_DELAY: 1000,     // Wait time between unfollows (milliseconds)
+    MAX_UNFOLLOWS: 999999,  // Default: Run until done (effectively infinite)
+    BATCH_SIZE: 50,         // Unfollow this many, then wait
+    BATCH_COOLDOWN: 1800000, // Time to wait between batches (ms) - 30 minutes
+    SCROLL_DELAY: 2000,     // Wait time after scrolling (ms)
+    ACTION_DELAY: 1000,     // Wait time between unfollows (ms)
     SKIP_FOLLOWERS: true    // Set to false if you want to unfollow EVERYONE
 };
 ```

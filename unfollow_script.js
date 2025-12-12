@@ -15,7 +15,9 @@
 
 (function() {
     const CONFIG = {
-        MAX_UNFOLLOWS: 50,      // Stop after this many unfollows
+        MAX_UNFOLLOWS: 999999,  // Set to a high number to run until done
+        BATCH_SIZE: 50,         // Unfollow this many, then wait
+        BATCH_COOLDOWN: 1800000, // Time to wait between batches (ms) - 30 minutes
         SCROLL_DELAY: 2000,     // Time to wait after scrolling (ms)
         ACTION_DELAY: 1000,     // Time to wait between actions (ms)
         SKIP_FOLLOWERS: true    // If true, only unfollows those who DON'T follow you back
@@ -72,7 +74,15 @@
                         confirmButton.click();
                         unfollowedCount++;
                         console.log(`🚫 Unfollowed user #${unfollowedCount}`);
-                        await sleep(CONFIG.ACTION_DELAY);
+
+                        // Batch Logic
+                        if (unfollowedCount % CONFIG.BATCH_SIZE === 0) {
+                            console.log(`☕ Batch of ${CONFIG.BATCH_SIZE} reached. Resting for ${CONFIG.BATCH_COOLDOWN / 1000 / 60} minutes...`);
+                            await sleep(CONFIG.BATCH_COOLDOWN);
+                            console.log("▶️ Resuming...");
+                        } else {
+                            await sleep(CONFIG.ACTION_DELAY);
+                        }
                     } else {
                         console.log("Could not find confirmation button.");
                     }
